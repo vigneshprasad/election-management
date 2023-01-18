@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Voter {
+  id                              Int             @id @default(autoincrement())
+  name                            String
+  gender                          Gender
+  age                             Int
+  epicNo                          String          @unique
+  part                            Part            @relation(fields: [partId], references: [id])
+  acNo                            Int
+  slNoInPart                      Int
+  hobli                           String
+  relationName                    String
+  relationType                    Relation
+  religion                        Religion?
+  caste                           String?
+  subcaste                        String?
+  category                        Category?
+  education                       Education?
+  economicStatus                  EconomicStatus?
+  phone                           String?
+  profession                      String?
+  village                         String?
+  familyMembers                   Int?
+  schemeAwareness                 YesNo?
+  toiletConstruction              YesNo?
+  PMAwasYojanaHousing             YesNo?
+  PMStreetVendorAndMudraLoan      YesNo?
+  JalJeevanPipedWater             YesNo?
+  AyushmanHealthCard              YesNo?
+  AvailServices                   YesNo?
+  WhichPartyResponsibleForSchemes Party?
+  PartyWorkingForKarnataka        Party?
+  SymbolOfMTB                     Symbol?
+  SymbolOfBachegowda              Symbol?
+  popularLeader                   Candidate?
+  createdAt                       DateTime        @default(now())
+  updatedAt                       DateTime        @updatedAt
+  VoterEditLog                    VoterEditLog[]
+  partId                          Int
+  verifiedBy                      String?
+  verifiedAt                      DateTime?
+}
+
+model VoterEditLog {
+  id        Int      @id @default(autoincrement())
+  voter     Voter    @relation(fields: [voterId], references: [id])
+  voterId   Int
+  user      String
+  oldData   Json?
+  newData   Json?
+  createdAt DateTime @default(now())
+}
+
+enum Relation {
+  F
+  M
+  H
+}
+
+enum Gender {
+  M
+  F
+  T
+}
+
+enum Religion {
+  HINDU
+  MUSLIM
+  CHRISTIAN
+  OTHER
+}
+
+enum Category {
+  GENERAL
+  SCST
+  OBC
+}
+
+enum Education {
+  ILLITERATE
+  PRIMARY
+  MIDDLE
+  MATRICULATION
+  POSTMATRICULATION
+  GRADUATION
+  POSTGRADUATION
+}
+
+enum EconomicStatus {
+  APL
+  BPL
+}
+
+enum Party {
+  BJP
+  CONGRESS
+  JDS
+  OTHERS
+  DONTKNOW
+}
+
+enum Symbol {
+  HAND
+  LOTUS
+  DONTKNOW
+  OTHER
+}
+
+enum Candidate {
+  BACHEGOWDA
+  SHARATHBACHEGOWDA
+  MTBNAGARAJ
+  MTBRAJESH
+  DONTKNOW
+  UNKNOWN
+}
+
+enum YesNo {
+  YES
+  NO
+  DONTKNOW
+  UNKNOWN
+}
+
+model UserPermissions {
+  id    Int                   @id @default(autoincrement())
+  user  String                @unique
+  parts UserPartPermissions[]
+}
+
+model Part {
+  id    Int                   @id
+  name  String                @unique
+  Voter Voter[]
+  users UserPartPermissions[]
+}
+
+model UserPartPermissions {
+  part              Part            @relation(fields: [partId], references: [id])
+  partId            Int
+  userPermissions   UserPermissions @relation(fields: [userPermissionsId], references: [id])
+  userPermissionsId Int
+  assignedAt        DateTime        @default(now())
+
+  @@id([partId, userPermissionsId])
+}
