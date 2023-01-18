@@ -1,12 +1,12 @@
 <script lang="ts">
-    import '../styles/global.css'
+    import '@picocss/pico/css/pico.min.css'
     import Navigation from '$root/lib/components/navigation.svelte';
     import { page } from '$app/stores'
 
 </script>
 
 {#if $page.data.user}
-    <div class="container">
+    <div class="page">
         <Navigation />
         <main class="content">
             <slot />
@@ -21,15 +21,10 @@
 {/if}
 
 <style>
-    .container {
+    .page {
         height: 100vh;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: auto 1fr;
-    }
-
-    .content {
-        border-left: 1px solid var(--color-border-primary);
     }
 
     /* @media (min-width: 1024px) {

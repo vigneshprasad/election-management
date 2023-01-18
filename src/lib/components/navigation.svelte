@@ -28,96 +28,35 @@
                 });
                 await invalidateAll();
                 const result: ActionResult = deserialize(await response.text());
-                console.log("RESULT", result)
                 applyAction(result);                
             }                        
         );
     }
 </script>
 
-<aside>
-    <div class="container">
-        <nav>
-            <ul>
-                <li class:active={path === '/home'}> 
-                    <a href="/">
-                        <Icon width="32" height="32" name="home" />
-						<span>Home</span>
-                    </a>
-                </li>
-                <li class:active={path === '/voterlist'}> 
-                    <a href="/voterlist">
-                        <Icon width="32" height="32" name="home" />
-						<span>Voter List</span>
-                    </a>
-                </li>
-
+<div class="navbar">
+    <nav class="container-fluid">
+        <ul>
+          <li><a href="./" class="contrast"><strong>Election Management</strong></a></li>
+        </ul>
+        <ul>
+            <li class:active={path === '/home'}> 
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li class:active={path === '/voterlist'}> 
+                <a href="/voterlist">
+                    <span>Voter List</span>
+                </a>
+            </li>
+            <!-- <li>
                 <form action="/logout" method="POST" on:submit|preventDefault={handleSubmit}>
-                    <button class="btn logout" type="submit">
+                    <button type="submit">
                         Log Out
                     </button>
                 </form>
-            </ul>
-        </nav>
-    </div> 
-
-</aside>
-
-<style>
-    .container {
-        position: sticky;
-        top: 0;
-    }
-
-    ul {
-        display: grid;
-        gap: var(--spacing-8);
-        font-size: var(--font-18);
-    }
-
-    li a {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--spacing-16);
-        padding: 1.4rem;
-        border-radius: var(--raadius-base);
-        transition: all 0.2 ease;
-    }
-
-    li a:hover {
-        background-color: var(--color-link-hover);
-    }
-
-    li.active {
-        font-weight: 700;
-    }
-
-    span {
-        display: none;
-    }
-
-    .logout {
-        display: none;
-        text-align: center;
-    }
-
-    .logout:hover {
-        background-color: var(--color-btn-primary-active-hover);
-    }
-
-    @media (min-width: 1024px) {
-        aside {
-            padding: 0 var(--spacing-32);
-        }
-
-        span {
-            display: block;
-        }
-
-        .logout {
-            width: 100%;
-            display: block;
-            margin-top: var(--spacing-16);
-        }
-    }
-</style>
+            </li> -->
+        </ul>
+      </nav>
+</div> 

@@ -51,56 +51,19 @@
     <title> MTB Rajesh Election</title>
 </svelte:head>
 
-<main
-    class="container"
-    in:fly={{ x: -100, duration: 250, delay:300}}
-    out:fly={{ x: -100, duration: 250}}
->
-    <section class="hero">
-        <h1 class="title">Election Management</h1>
-        <p class="text">Manage voter list and verify voters</p>
-
-    </section>
-
-    <section class="login">
-        <form method="POST" on:submit|preventDefault={handleSubmit} action="?/login">
-            <button class="btn" type="submit">Log In</button> 
-        </form>        
-    </section>
+<main class="container">
+    <h1 class="title">Election Management</h1>
+    <p class="text">Manage voter list and verify voters</p>
+    <form method="POST" on:submit|preventDefault={handleSubmit} action="?/login">
+        <button class="btn" type="submit">Log In</button> 
+    </form>        
 </main>
 
 <style>
     .container {
         height: 100vh;
         display: grid;
-    }
-
-    .hero,
-    .login {
-        display: grid;
-        place-content: center;
-    }
-
-    .hero {
-        background-color: var(--color-brand);
         text-align: center;
-    }
-
-    .title {
-        font-size: var(--font-80);
-        z-index: 2;
-    }
-
-    .text {
-        padding: var(--spacing-16);
-        font-weight: bold;
-        font-size: var(--font-24);
-        z-index: 1;
-    }
-
-    @media (min-width: 1024px) {
-        .container {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        place-content: center;
     }
 </style>
