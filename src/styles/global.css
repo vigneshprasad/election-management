@@ -126,6 +126,6 @@ ol {
 
 .placeholder {
 	padding: var(--spacing-20) 0;
-	backgorund-color: var(--color-placeholder);
+	background-color: var(--color-placeholder);
 	border-radius: var(--radius-base);
 }
