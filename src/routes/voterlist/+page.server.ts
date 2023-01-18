@@ -1,8 +1,11 @@
 import prisma from '$root/lib/prisma'
-import { error } from '@sveltejs/kit'; 
+import { error, redirect } from '@sveltejs/kit'; 
 import type { PageServerLoad } from '../$types';
 
 export const load = (async ({ locals, url }) => {
+    if(!locals.user) {
+        throw redirect(302, '/login');
+    }
     const parts = await prisma.part.findMany({
         where: {
             users: {
@@ -14,6 +17,7 @@ export const load = (async ({ locals, url }) => {
             }
         }
     });
+    console.log("PARTS", parts);
     
     if(!parts) {
         throw error(404, 'Not found');

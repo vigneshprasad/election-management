@@ -1,11 +1,12 @@
 import prisma from "$root/lib/prisma";
 import { Candidate, Category, EconomicStatus, Education, Gender, Party, Relation, Religion, Symbol, YesNo, type Voter } from "@prisma/client";
-import { error } from "@sveltejs/kit";
-import { dataset_dev } from "svelte/internal";
+import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load = (async ({ params, locals }) => {
-    
+    if(!locals.user) {
+        throw redirect(302, '/login');
+    }
     const voter = await prisma.voter.findUnique({
         where: {
             id: Number(params.id),
