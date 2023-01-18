@@ -8,14 +8,14 @@
 {#if $page.data.user}
     <div class="page">
         <Navigation />
-        <main class="content">
+        <main class="container">
             <slot />
         </main>
     </div>
 {/if}
 
 {#if !$page.data.user}
-    <main class="content">
+    <main class="container">
         <slot />
     </main>
 {/if}
@@ -26,12 +26,4 @@
         margin: 0 auto;
         display: grid;
     }
-
-    /* @media (min-width: 1024px) {
-        .container {
-            max-width: 1240px;
-            margin: 0 auto;
-            grid-template-columns: 1fr 4fr;
-        }
-    } */
 </style>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-    import Icon from './icon.svelte';
     import { onMount } from "svelte";
     import type { Auth0Client } from "@auth0/auth0-spa-js";
     import auth from "$lib/services/auth";

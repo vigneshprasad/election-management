@@ -120,10 +120,14 @@
     
 </script>
 
-<div class="container">
+<svelte:head>
+    <title> {name} </title>
+</svelte:head>
+
+<div class="form-container">
     <form class="form" method="POST" action="?/edit" on:submit|preventDefault={handleFormSubmit}>
         <div>
-            <h1> Voter List Data </h1>
+            <h1> Voter - {name} </h1>
             <label> 
                 Name 
                 <input name="name" type="text" bind:value={name} required>
@@ -355,7 +359,7 @@
                 </select>
             </label>
         </div>
-        <button type="submit" class="btn"> Save </button>
+        <button type="submit"> Save </button>
     </form>
 
     <br />
@@ -367,37 +371,20 @@
         <p> Verified By: {verifiedBy.toString()}</p>
         <p> Verified at: {verifiedAt?.toString()}</p>
     {:else}
-        <p> Voter unverified </p>
+        <p> Voter - Unverified </p>
         <form class="form" method="POST" action="?/verify" on:submit|preventDefault={handleVerify}>
-            <button type="submit" class="btn"> Verify Now </button>
+            <button type="submit"> Verify Now </button>
         </form>
     {/if}
 </div>
 
 
 <style>
-	.container {
-		display: grid;
-		align-items: center;
-		gap: var(--spacing-16);
-		padding: var(--spacing-16) var(--spacing-24);
-		border-bottom: 1px solid var(--color-border-primary);
+	.form-container {
+        margin-top: 16px;
 	}
 
-	form {
-        display: flex;
-        flex-direction: column;
-		gap: var(--spacing-16) var(--spacing-16);
-	}
-
-	input {
-		color: var(--color-text-primary);
-		background-color: transparent;
-	}
-
-	button {
-		max-width: 80px;
-		font-size: var(--font-16);
-		padding: var(--spacing-16);
-	}
+    h1 {
+        margin-bottom: 16px;
+    }
 </style>
