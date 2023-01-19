@@ -129,6 +129,9 @@ export const actions:Actions = {
             },
         })
 
-        return {};
+        return {
+            verifiedAt: newVoter.verifiedAt,
+            verifiedBy: newVoter.verifiedBy
+        };
     }
 }

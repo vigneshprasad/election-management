@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, deserialize } from "$app/forms";
-	import { invalidateAll } from "$app/navigation";
+	import { invalidate, invalidateAll } from "$app/navigation";
 	import { Category, EconomicStatus, Education, Gender, Party, Relation, Religion, Candidate, Symbol, type Part, type Voter, YesNo } from "@prisma/client";
 	import type { ActionResult } from "@sveltejs/kit";
 	import type { PageData } from "./$types";
@@ -9,6 +9,9 @@
     let voter:Voter = data.voter;
     let parts:Part[] = data.parts;
     let user = data.user;
+
+    let editLoading:boolean = false;
+    let verifyLoading:boolean = false;
 
     $: ({ 
         id,
@@ -51,6 +54,7 @@
     } = voter);
 
     async function handleFormSubmit(this: any) {
+        editLoading = true;
         let data = new FormData()
         data.append('id', String(id));
         name && data.append('name', name);
@@ -97,10 +101,12 @@
             await invalidateAll()
         }
 
-        applyAction(result)
+        applyAction(result);
+        editLoading = false;
     }
 
     async function handleVerify(this: any) {
+        verifyLoading = true;
         let data = new FormData();
         data.append('user', String(user.name));
 
@@ -111,10 +117,13 @@
 
         const result: ActionResult = deserialize(await response.text());
 
-        if(result.type === 'success') {
-            await invalidateAll()
+        if(result.type === 'success') { 
+            verifiedAt = result?.data?.verifiedAt;
+            verifiedBy = result?.data?.verifiedBy;
+            await invalidateAll();
         }
 
+        verifyLoading = false;
         applyAction(result)
     }
     
@@ -359,10 +368,9 @@
                 </select>
             </label>
         </div>
-        <button type="submit"> Save </button>
+        <button type="submit" disabled={editLoading} aria-busy={editLoading}> Save </button>
     </form>
 
-    <br />
     <br />
     <h1> Other Details </h1>
     <p> Created at: {createdAt.toString()}</p>
@@ -373,7 +381,7 @@
     {:else}
         <p> Voter - Unverified </p>
         <form class="form" method="POST" action="?/verify" on:submit|preventDefault={handleVerify}>
-            <button type="submit"> Verify Now </button>
+            <button type="submit" disabled={verifyLoading} aria-busy={verifyLoading}> Verify Now </button>
         </form>
     {/if}
 </div>
