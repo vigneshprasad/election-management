@@ -17,10 +17,9 @@ export const load = (async ({ locals, url }) => {
             }
         }
     });
-    console.log("PARTS", parts);
     
     if(!parts) {
-        throw error(404, 'Not found');
+        throw error(404, `Not found. No parts were loaded. ${parts} `);
     }
 
     const partIds = parts.map(part => part.id);
@@ -32,7 +31,7 @@ export const load = (async ({ locals, url }) => {
     
     if(partId) {
         if(!(partIds.includes(partId))) {
-            throw error(404, 'Not found');
+            throw error(404, `Not found, You dont have permission to view this Part ${partIds}`);
         }
         data = await prisma.voter.findMany({
             skip: page * 100,
@@ -57,7 +56,7 @@ export const load = (async ({ locals, url }) => {
     }
 
     if(!data) {
-        throw error(404, 'Not found');
+        throw error(404, `Not found. No voters were found ${data}`);
     }
     const voters = data.map((voter) => {
         return {
