@@ -9,6 +9,6 @@ export const load: LayoutServerLoad = async ({ locals }) => {
     })
     return {
         user: locals.user,
-        isAdmin: userPermissions?.isAdmin
+        // isAdmin: userPermissions?.isAdmin
     }
 }

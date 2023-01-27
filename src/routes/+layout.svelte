@@ -8,7 +8,8 @@
 
 {#if $page.data.user}
     <div class="page">
-        <Navigation isAdmin={$page.data.user}/>
+        <!-- <Navigation isAdmin={$page.data.user}/> -->
+        <Navigation />
         {#if $navigating} 
             <div class="loading" aria-busy="true" />
         {:else}
