@@ -6,14 +6,12 @@ export const load = (async ({ locals, url }) => {
     if(!locals.user) {
         throw redirect(302, '/login');
     }
-    let userPermissions;
-    if(locals.user.name) {
-        userPermissions = await prisma.userPermissions.findUnique({
-            where: {
-                user: locals?.user?.name
-            }
-        })
-    }
+    
+    const userPermissions = await prisma.userPermissions.findUnique({
+        where: {
+            user: locals?.user?.name
+        }
+    })
     let parts;
     if(userPermissions?.isAdmin) {
         parts = await prisma.part.findMany();

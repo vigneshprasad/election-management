@@ -9,7 +9,7 @@
 
     $: path = $page.url.pathname 
     
-    // export let isAdmin:boolean;
+    export let isAdmin:boolean;
     let auth0Client:Auth0Client;
 
     onMount(async () => {
@@ -50,13 +50,13 @@
                     <span>Voter List</span>
                 </a>
             </li>
-            <!-- {#if isAdmin} 
+            {#if isAdmin} 
                 <li class:active={path === '/dashboards'}> 
                     <a href="/dashboards">
                         <span>Dashboards</span>
                     </a>
                 </li>
-            {/if} -->
+            {/if}
             <!-- <li>
                 <form action="/logout" method="POST" on:submit|preventDefault={handleSubmit}>
                     <button type="submit">
