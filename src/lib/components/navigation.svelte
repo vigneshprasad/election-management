@@ -7,8 +7,9 @@
 	import type { ActionResult } from "@sveltejs/kit";
 	import { invalidateAll } from '$app/navigation';
 
-    $: path = $page.url.pathname    
-
+    $: path = $page.url.pathname 
+    
+    export let isAdmin:boolean;
     let auth0Client:Auth0Client;
 
     onMount(async () => {
@@ -49,6 +50,13 @@
                     <span>Voter List</span>
                 </a>
             </li>
+            {#if isAdmin} 
+                <li class:active={path === '/dashboards'}> 
+                    <a href="/dashboards">
+                        <span>Dashboards</span>
+                    </a>
+                </li>
+            {/if}
             <!-- <li>
                 <form action="/logout" method="POST" on:submit|preventDefault={handleSubmit}>
                     <button type="submit">

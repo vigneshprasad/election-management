@@ -97,16 +97,59 @@ async function getVoters(id:number, file:string):  Promise<{voters:Voter[], id:n
 
 async function seedVoters() {
     const fileNames = [
-        "/data/151.csv",
-        "/data/155.csv",
-        "/data/156.csv",
-        "/data/158.csv",
-        "/data/159.csv",
-        "/data/175.csv",
-        "/data/180.csv",
-        "/data/182.csv",
+        "/data/10.csv",
+        "/data/51.csv",
+        "/data/52.csv",
+        "/data/53.csv",
+        "/data/54.csv",
+        "/data/55.csv",
+        "/data/56.csv",
+        "/data/57.csv",
+        "/data/58.csv",
+        "/data/59.csv",
+        "/data/60.csv",
+        "/data/61.csv",
+        "/data/62.csv",
+        "/data/63.csv",
+        "/data/64.csv",
+        "/data/65.csv",
+        "/data/66.csv",
+        "/data/67.csv",
+        "/data/68.csv",
+        "/data/69.csv",
+        "/data/70.csv",
+        "/data/71.csv",
+        "/data/72.csv",
+        "/data/73.csv",
+        "/data/74.csv",
+        "/data/75.csv",
+        "/data/76.csv",
+        "/data/77.csv",
+        "/data/78.csv",
+        "/data/79.csv",
+        "/data/80.csv",
+        "/data/81.csv",
+        "/data/82.csv",
+        "/data/83.csv",
+        "/data/84.csv",
+        "/data/85.csv",
+        "/data/86.csv",
+        "/data/87.csv",
+        "/data/88.csv",
+        "/data/89.csv",
+        "/data/90.csv",
+        "/data/91.csv",
+        "/data/92.csv",
+        "/data/93.csv",
+        "/data/94.csv",
+        "/data/95.csv",
+        "/data/96.csv",
+        "/data/97.csv",
+        "/data/98.csv",
+        "/data/99.csv",
+        "/data/100.csv",
     ]
-    let idToPass = 1;
+    let idToPass = 9271;
     for(let j = 0; j < fileNames.length; j++) {
         console.log("PART", fileNames[j], "PREPARING", new Date());
         const { voters, id } = await getVoters(idToPass, fileNames[j])
@@ -160,7 +203,6 @@ async function seedParts() {
         })
     }
 }
-
 
 async function uploadData(surveyfilename:string, voterfilename:string, dry_run:boolean) {
     const __filename = fileURLToPath(import.meta.url);
@@ -267,7 +309,7 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
             }
             if(match) {
                 count += 1
-                console.log(voter, person)
+                // console.log(voter, person)
                 if(dry_run) {
                     continue
                 }
@@ -289,7 +331,7 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
                         PMStreetVendorAndMudraLoan: YesNo[person.PMStreetVendorAndMudraLoan as keyof typeof YesNo] || undefined,
                         JalJeevanPipedWater: YesNo[person.JalJeevanPipedWater as keyof typeof YesNo] || undefined,
                         AyushmanHealthCard: YesNo[person.AyushmanHealthCard as keyof typeof YesNo] || undefined,
-                        PartyWorkingForKarnataka: Party[person.PartyWorkingForKarnataka as keyof typeof Party] || undefined,
+                        PartyWorkingForKarnataka: person.PartyWorkingForKarnataka && sanitiseParty(person.PartyWorkingForKarnataka) || undefined,
                         popularLeader: person.popularLeader && sanitiseLeader(person.popularLeader) || undefined,     
                     }
                 });
@@ -370,8 +412,24 @@ function sanitiseLeader(leader:string) : Candidate {
     return Candidate.UNKNOWN
 }
 
+function sanitiseParty(leader:string) : Party | undefined {
+    if(leader.includes("BJP")) {
+        return Party.BJP
+    } 
+    if(leader.includes("Congress")) {
+        return Party.CONGRESS
+    } 
+    if(leader.includes("JDS")) {
+        return Party.JDS
+    }
+    if(leader.includes("Others")) {
+        return Party.OTHERS
+    }  
+    return undefined;
+}
+
 seedVoters()
 
-// uploadData('/data/survey/151.csv', '/data/151.csv', true)
-// uploadData('/data/survey/158.csv', '/data/158.csv', true)
+// uploadData('/data/survey/151.csv', '/data/151.csv', false)
+// uploadData('/data/survey/158.csv', '/data/158.csv', false)
 // seedParts()

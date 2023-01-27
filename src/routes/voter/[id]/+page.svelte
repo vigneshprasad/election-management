@@ -22,7 +22,6 @@
         epicNo,
         acNo,
         slNoInPart,
-        hobli,
         relationName,
         relationType,
         religion,
@@ -64,7 +63,6 @@
         epicNo && data.append('epicNo', epicNo);
         acNo && data.append('acNo', String(acNo));
         slNoInPart && data.append('slNoInPart', String(slNoInPart));
-        hobli && data.append('hobli', hobli);
         relationName && data.append('relationName', relationName);
         relationType && data.append('relationType', relationType);
         religion && data.append('religion', String(religion));
@@ -173,10 +171,6 @@
             <label> 
                 Sl No in Part
                 <input name="slNoInPart" type="number" bind:value={slNoInPart} required>
-            </label>
-            <label> 
-                Hobli
-                <input name="hobli" type="text" bind:value={hobli} required>
             </label>
             <label> 
                 Relation Name
