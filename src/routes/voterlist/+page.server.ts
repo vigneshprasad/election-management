@@ -6,17 +6,27 @@ export const load = (async ({ locals, url }) => {
     if(!locals.user) {
         throw redirect(302, '/login');
     }
-    const parts = await prisma.part.findMany({
+    const userPermissions = await prisma.userPermissions.findUnique({
         where: {
-            users: {
-                some: {
-                    userPermissions: {
-                        user: locals?.user?.name
+            user: locals?.user?.name
+        }
+    })
+    let parts;
+    if(userPermissions?.isAdmin) {
+        parts = await prisma.part.findMany();
+    } else {
+        parts = await prisma.part.findMany({
+            where: {
+                users: {
+                    some: {
+                        userPermissions: {
+                            user: locals?.user?.name
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    }
     
     if(!parts) {
         throw error(404, `Not found. No parts were loaded. ${parts} `);

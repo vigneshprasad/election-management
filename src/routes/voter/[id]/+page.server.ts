@@ -13,19 +13,41 @@ export const load = (async ({ params, locals }) => {
         }
     });
 
-    const parts = await prisma.part.findMany({
+    if(!locals.user) {
+        throw redirect(302, '/login');
+    }
+    const userPermissions = await prisma.userPermissions.findUnique({
         where: {
-            users: {
-                some: {
-                    userPermissions: {
-                        user: locals?.user?.name
+            user: locals?.user?.name
+        }
+    })
+
+    let parts;
+    if(userPermissions?.isAdmin) {
+        parts = await prisma.part.findMany();
+    } else {
+        parts = await prisma.part.findMany({
+            where: {
+                users: {
+                    some: {
+                        userPermissions: {
+                            user: locals?.user?.name
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    }
     
     if(!parts || !voter) {
+        throw error(404, 'Not found');
+    }
+
+    const ids = parts.map(function(i) {
+        return i.id;
+    });
+
+    if(voter && !ids.includes(voter?.partId)) {
         throw error(404, 'Not found');
     }
     
@@ -59,7 +81,6 @@ export const actions:Actions = {
                 epicNo: String(form.get('epicNo')) || undefined,
                 acNo: Number(form.get('acNo')) || undefined,
                 slNoInPart: Number(form.get('slNoInPart')) || undefined,
-                hobli: String(form.get('hobli')) || undefined,
                 relationName: String(form.get('relationName')) || undefined,
                 relationType: Relation[form.get('relationType') as keyof typeof Relation] || undefined,
                 religion: Religion[form.get('religion') as keyof typeof Religion] || undefined,
