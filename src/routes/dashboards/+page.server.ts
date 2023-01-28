@@ -24,23 +24,19 @@ export const load = (async ({ locals, url }) => {
     // - By Jal Jeevan
     // - By Ayush
 
+    const parts = await prisma.part.findMany();
     // const partId = Number(url.searchParams.get('partId'))
     const religionPie = await getReligionPies();
     const educationPie = await getEducationPies();
         
     return {
-        religionPie, educationPie
+        parts, religionPie, educationPie
     };
 }) satisfies PageServerLoad;
 
 
 async function getReligionPies() {
     //By Religion
-    console.log("BY RELIGION");
-    const total = await prisma.voter.groupBy({
-        by: ['religion'],
-        _count: true,
-    })
 
     const bjpReligion = await prisma.voter.groupBy({
         by: ['religion'],
@@ -120,12 +116,11 @@ async function getReligionPies() {
         }
     });
 
-    console.log(religionPie);
+    return religionPie;
 }
 
 async function getEducationPies() {
     //By Education
-    console.log("By Education");
     const bjpEducation = await prisma.voter.groupBy({
         by: ['education'],
         _count: true,
@@ -220,6 +215,5 @@ async function getEducationPies() {
         }
     });
 
-    console.log(educationPie);
-
+    return educationPie;
 }
