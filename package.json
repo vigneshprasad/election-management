@@ -19,6 +19,7 @@
 	"devDependencies": {
 		"@playwright/test": "1.25.0",
 		"@sveltejs/adapter-auto": "1.0.1",
+		"@sveltejs/adapter-vercel": "1.0.2",
 		"@sveltejs/kit": "1.0.0",
 		"@types/auth0-js": "^9.14.6",
 		"@types/node": "^18.11.18",
