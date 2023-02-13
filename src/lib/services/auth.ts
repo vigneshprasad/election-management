@@ -1,6 +1,6 @@
 // src/authService.js
 
-import { createAuth0Client, Auth0Client } from "@auth0/auth0-spa-js";
+import { createAuth0Client, type Auth0Client } from "@auth0/auth0-spa-js";
 import config from "../../auth_config";
 
 async function createClient() {

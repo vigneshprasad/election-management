@@ -15,3 +15,6 @@ declare namespace App {
 	// interface Error {}
 	// interface Platform {}
 }
+
+declare module 'svelte-frappe-charts'; 
+declare module 'svelte-csv';

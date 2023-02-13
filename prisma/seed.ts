@@ -97,9 +97,9 @@ async function getVoters(id:number, file:string):  Promise<{voters:Voter[], id:n
 
 async function seedVoters() {
     const fileNames = [
-        "/data/100.csv",
+        "/data/293.csv"
     ]
-    let idToPass = 45599;
+    let idToPass = 141207;
     for(let j = 0; j < fileNames.length; j++) {
         console.log("PART", fileNames[j], "PREPARING", new Date());
         const { voters, id } = await getVoters(idToPass, fileNames[j])
@@ -120,27 +120,15 @@ async function seedVoters() {
             })
         }
         console.log("DONE WITH", fileNames[j], "CREATED", voters.length, new Date());
+        console.log(idToPass);
         console.log("---------------------");
     }
-    console.log(idToPass);
     
 }
 
 async function seedParts() {
     const parts:[id:number, name:string][] = [
-        [189, "Hoskote Town Govt Higher Middle School Near Bus Stand Room 2"],
-        [190, "Dandupalya"],
-        [191, "Siddharthanagar"],
-        [192, "Vardapura"],
-        [193, "Kolathur"],
-        [194, "Haralur"],
-        [195, "Solur"],
-        [196, "Orohalli"],
-        [197, "Injanahalli"],
-        [198, "Appasandra"],
-        [199, ""],
-        [200, "Doddadenehalli"],
-        [201, "Alagondahalli"],
+        [293,	"Maramgere"],
     ];
     for(let i = 0; i < parts.length; i++) {
         const part = parts[i]
@@ -226,6 +214,7 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
     let count = 0;
 
     for(let i=0; i < surveyData.length; i++) {
+
         const person = surveyData[i];
         let match = false;
         let maxMatch = 0
@@ -242,7 +231,7 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
                 continue
             }
             const comp = compareTwoStrings(person.name, voter.name);
-            if(comp < 0.6) {
+            if(comp < 0.5) {
                 continue
             }
             // if(voter.name[0].toLowerCase() !== person.name[0].toLowerCase()) {
@@ -257,15 +246,17 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
                 voter.complete = true;
                 finalVoter = voter;
             }
-            if(match) {
-                count += 1
-                // console.log(voter, person)
-                if(dry_run) {
-                    continue
-                }
+        }
+        if(match) {
+            count += 1
+            // console.log(voter, person)
+            if(dry_run) {
+                continue
+            }
+            if(finalVoter) {
                 await prisma.voter.update({
                     where: {
-                        epicNo: voter.epicNo
+                        epicNo: finalVoter.epicNo
                     },
                     data: {
                         religion: person.religion && sanitiseReligion(person.religion) || undefined,
@@ -378,8 +369,47 @@ function sanitiseParty(leader:string) : Party | undefined {
     return undefined;
 }
 
-seedVoters()
-
-// uploadData('/data/survey/151.csv', '/data/151.csv', false)
-// uploadData('/data/survey/158.csv', '/data/158.csv', false)
+// seedVoters()
 // seedParts()
+// uploadData('/data/survey/175.csv', '/data/175.csv', false)
+// uploadData('/data/survey/181.csv', '/data/181.csv', false)
+// uploadData('/data/survey/184.csv', '/data/184.csv', false)
+// uploadData('/data/survey/183.csv', '/data/183.csv', false)
+// uploadData('/data/survey/183.csv', '/data/183.csv', false)
+// uploadData('/data/survey/182.csv', '/data/182.csv', false)
+// uploadData('/data/survey/180.csv', '/data/180.csv', false)
+// uploadData('/data/survey/179.csv', '/data/179.csv', false)
+// uploadData('/data/survey/190.csv', '/data/190.csv', false)
+// uploadData('/data/survey/150.csv', '/data/150.csv', false)
+// uploadData('/data/survey/192.csv', '/data/192.csv', false)
+// uploadData('/data/survey/170.csv', '/data/170.csv', false)
+// uploadData('/data/survey/189.csv', '/data/189.csv', false)
+// uploadData('/data/survey/178.csv', '/data/178.csv', false)
+// voterClear()
+
+async function voterClear() : Promise<void> {
+    await prisma.voter.updateMany({
+        where: {
+            religion: {
+                not: null
+            } 
+        },
+        data: {
+            religion: null,
+            caste: null,
+            subcaste: null,
+            category: null,
+            education: null,
+            economicStatus: null,
+            phone: null,
+            profession: null,
+            village: null,
+            familyMembers: null,
+            PMStreetVendorAndMudraLoan: null,
+            JalJeevanPipedWater: null,
+            AyushmanHealthCard: null,
+            PartyWorkingForKarnataka: null,
+            popularLeader: null
+          },
+    });
+}

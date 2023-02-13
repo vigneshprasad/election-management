@@ -67,7 +67,7 @@
     <select id="partId" bind:value={selectedPart}>
         <option selected={selectedPart===-1} value={-1}>Select a Part</option>
         {#each parts as part}
-            <option selected={part.id===selectedPart} value={part.id}>{part.name}</option>
+            <option selected={part.id===selectedPart} value={part.id}>{part.id} | {part.name}</option>
         {/each}
     </select>
     <button class="submit" type="submit"> Submit </button>
