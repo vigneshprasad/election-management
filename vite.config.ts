@@ -7,7 +7,26 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit'
 const config: UserConfig = {
 	plugins: [
 		sveltekit(),
-		SvelteKitPWA({ registerType: 'autoUpdate', devOptions: { enabled: true }}),
+		SvelteKitPWA(
+			{ 
+				registerType: 'autoUpdate', 
+				devOptions: { enabled: true },
+				manifest: {
+					icons: [ 
+						{
+							src: 'icon-192x192.png',
+							sizes: '192x192',
+							type: 'image/png'
+						},
+						{
+							src: 'icon-512x512.png',
+							sizes: '512x512',
+							type: 'image/png'
+						}
+					]
+				}
+			}
+		),
 	],
 	resolve: {
 		alias: {

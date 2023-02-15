@@ -1,5 +1,5 @@
 import prisma from "$root/lib/prisma";
-import type { LayoutServerLoad } from ".svelte-kit/types/src/routes/$types"
+import type { LayoutServerLoad } from "./$types"
 
 export const load: LayoutServerLoad = async ({ locals }) => {
     let isAdmin = false;
