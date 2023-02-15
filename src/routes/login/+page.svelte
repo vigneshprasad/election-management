@@ -53,7 +53,7 @@
 
 <main class="container">
     <h1 class="title">Election Management</h1>
-    <p class="text">Manage voter list and verify voters</p>
+    <p class="text">Manage voter list, checkout dashboards and verify voters</p>
     <form method="POST" on:submit|preventDefault={handleSubmit} action="?/login">
         <button class="btn" type="submit">Log In</button> 
     </form>        
