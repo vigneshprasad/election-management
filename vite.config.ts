@@ -1,12 +1,13 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+// import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
 import type { UserConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const config: UserConfig = {
 	plugins: [
 		sveltekit(),
-		SvelteKitPWA()
+		VitePWA({ registerType: 'autoUpdate', devOptions: { enabled: true }}),
 	],
 	resolve: {
 		alias: {
