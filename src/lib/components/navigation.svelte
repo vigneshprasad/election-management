@@ -37,14 +37,9 @@
 <div class="navbar">
     <nav class="container-fluid">
         <ul>
-          <li><a href="./" class="contrast"><strong>Election Management</strong></a></li>
+          <li><a href="./" class="contrast"><strong>Home</strong></a></li>
         </ul>
         <ul>
-            <li class:active={path === '/home'}> 
-                <a href="/">
-                    <span>Home</span>
-                </a>
-            </li>
             <li class:active={path === '/voterlist'}> 
                 <a href="/voterlist">
                     <span>Voter List</span>
@@ -57,13 +52,6 @@
                     </a>
                 </li>
             {/if}
-            <!-- <li>
-                <form action="/logout" method="POST" on:submit|preventDefault={handleSubmit}>
-                    <button type="submit">
-                        Log Out
-                    </button>
-                </form>
-            </li> -->
         </ul>
       </nav>
 </div> 

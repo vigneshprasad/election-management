@@ -60,7 +60,8 @@ export const load = (async ({ locals, url }) => {
             take: 100,
             where: {
                 name: {
-                    contains: search
+                    contains: search,
+                    mode: 'insensitive'
                 }
             }
         });

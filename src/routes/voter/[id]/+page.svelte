@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { applyAction, deserialize } from "$app/forms";
-	import { invalidate, invalidateAll } from "$app/navigation";
-	import { Category, EconomicStatus, Education, Gender, Party, Relation, Religion, Candidate, Symbol, type Part, type Voter, YesNo } from "@prisma/client";
+	import { invalidateAll } from "$app/navigation";
+	import { generateRelationString } from "$root/lib/services/stringProcessingFunctions";
+	import { Category, EconomicStatus, Education, Party, Religion, Candidate, Symbol, type Part, type Voter, YesNo, type Location } from "@prisma/client";
 	import type { ActionResult } from "@sveltejs/kit";
+	import { fade } from "svelte/transition";
 	import type { PageData } from "./$types";
 
     export let data:PageData;
@@ -55,16 +57,19 @@
     async function handleFormSubmit(this: any) {
         editLoading = true;
         let data = new FormData()
+        const locationData = await getCoords();
+        if(!locationData) {
+            alert('Please enable location permissions');
+            verifyLoading = false;
+            return;
+        }
+        data.append('accuracy', String(locationData?.accuracy));
+        data.append('altitude', String(locationData?.altitude));
+        data.append('altitudeAccuracy', String(locationData?.altitudeAccuracy));
+        data.append('latitude', String(locationData?.latitude));
+        data.append('longitude', String(locationData?.longitude));
+        data.append('timestamp', String(locationData?.timestamp));
         data.append('id', String(id));
-        name && data.append('name', name);
-        gender && data.append('gender', gender);
-        age && data.append('age', String(age));
-        partId && data.append('age', String(partId));
-        epicNo && data.append('epicNo', epicNo);
-        acNo && data.append('acNo', String(acNo));
-        slNoInPart && data.append('slNoInPart', String(slNoInPart));
-        relationName && data.append('relationName', relationName);
-        relationType && data.append('relationType', relationType);
         religion && data.append('religion', String(religion));
         caste && data.append('caste', caste);
         subcaste && data.append('subcaste', subcaste);
@@ -106,7 +111,20 @@
     async function handleVerify(this: any) {
         verifyLoading = true;
         let data = new FormData();
+        const locationData = await getCoords();
+        if(!locationData) {
+            alert('Please enable location permissions');
+            verifyLoading = false;
+            return;
+        }
+        data.append('accuracy', String(locationData.accuracy));
+        data.append('altitude', String(locationData.altitude));
+        data.append('altitudeAccuracy', String(locationData.altitudeAccuracy));
+        data.append('latitude', String(locationData.latitude));
+        data.append('longitude', String(locationData.longitude));
+        data.append('timestamp', String(locationData.timestamp));
         data.append('user', String(user.name));
+        data.append('id', String(voter.id));
 
         const response = await fetch(this.action, {
             method: 'POST',
@@ -124,6 +142,21 @@
         verifyLoading = false;
         applyAction(result)
     }
+
+    const getCoords = async () => {
+        const position:any = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
+        });
+    
+        return {
+            accuracy: position.coords.accuracy,
+            altitude: position.coords.altitude,
+            altitudeAccuracy: position.coords.altitudeAccuracy,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            timestamp: position.timestamp,
+        };
+    };
     
 </script>
 
@@ -131,65 +164,19 @@
     <title> {name} </title>
 </svelte:head>
 
+<article class="card" transition:fade>
+    <h1 class="name">{name} </h1>
+    <h5 class="details">{gender} {age}</h5>
+    <h5 class="details">{generateRelationString(relationName, relationType, gender)}</h5>
+    <h5 class="details"> Epic Number: {epicNo} </h5>
+    <h5 class="details"> Part: {partId} </h5>
+    <h5 class="details"> Sl No in Part: {slNoInPart} </h5>
+</article>
+
 <div class="form-container">
     <form class="form" method="POST" action="?/edit" on:submit|preventDefault={handleFormSubmit}>
-        <div>
-            <h1> Voter - {name} </h1>
-            <label> 
-                Name 
-                <input name="name" type="text" bind:value={name} required>
-            </label>
-            <label> 
-                Gender 
-                <select id="gender" bind:value={gender} required>
-                    {#each Object.keys(Gender) as genderOption}
-                        <option selected={gender===genderOption} value={genderOption}>{genderOption}</option>
-                    {/each}
-                </select>
-            </label>
-            <label> 
-                Age 
-                <input name="age" type="text" bind:value={age} required>
-            </label>
-            <label> 
-                Part 
-                <select id="partId" bind:value={partId} required>
-                    <option disabled selected={partId==undefined} value={undefined}>Select a Part</option>
-                    {#each parts as part}
-                        <option selected={part.id===partId} value={part.id}>{part.name}</option>
-                    {/each}
-                </select>
-            </label>
-            <label> 
-                Epic Number
-                <input name="epicNo" type="text" bind:value={epicNo} required>
-            </label>
-            <label> 
-                Ac Number
-                <input name="acNo" type="number" bind:value={acNo} required>
-            </label>
-            <label> 
-                Sl No in Part
-                <input name="slNoInPart" type="number" bind:value={slNoInPart} required>
-            </label>
-            <label> 
-                Relation Name
-                <input name="relationName" type="text" bind:value={relationName} required>
-            </label>
-            <label> 
-                Relation Type
-                <select id="relationType" bind:value={relationType} required>
-                    <option disabled selected={relationType==undefined} value={undefined}>Select a Relation Type</option>
-                    {#each Object.keys(Relation) as relationOption}
-                        <option selected={relationType===relationOption} value={relationOption}>{relationOption}</option>
-                    {/each}
-                </select>
-            </label>
-            <br />
-            <br />
-        </div>
-        <div>
-            <h1> Survey Data </h1>
+        <h1> Survey Data </h1>
+        <div class="survey-form">
             <label> 
                 Religion
                 <select id="religion" bind:value={religion}>
@@ -252,8 +239,8 @@
             </label>
             <br />
         </div>
-        <div>
-            <h1> Govt. Schemes Survey</h1>
+        <h1> Govt. Schemes Survey</h1>
+        <div class="schemes-form">
             <label> 
                 Are you aware of the Central Govt and State Govt schemes?
                 <select id="schemeAwareness" bind:value={schemeAwareness}>
@@ -314,8 +301,8 @@
             </label>
             <br />
         </div>
-        <div>
-            <h1> Party Survey</h1>
+        <h1> Party Survey</h1>
+        <div class="choice-form">
             <label> 
                 Do you know which Government and party had announced these schemes? If Yes which party & Government?
                 <select id="WhichPartyResponsibleForSchemes" bind:value={WhichPartyResponsibleForSchemes}>
@@ -383,10 +370,43 @@
 
 <style>
 	.form-container {
-        margin-top: 16px;
+        margin-top: 64px;
 	}
 
     h1 {
         margin-bottom: 16px;
+        margin-top: 16px
     }
+
+    .name {
+        margin-top: 0px;
+    }
+
+    .card {
+        margin-top: 64px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        padding: 8px 16px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .survey-form, .schemes-form, .choice-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 16px;
+    }
+
+    .details {
+        margin: 0
+    }
+
+    @media (max-width: 480px) {
+        .survey-form, .schemes-form, .choice-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-column-gap: 16px;
+        }
+    }
+  
 </style>

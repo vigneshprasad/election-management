@@ -1,5 +1,5 @@
 import prisma from "$root/lib/prisma";
-import { Candidate, Category, EconomicStatus, Education, Gender, Party, Relation, Religion, Symbol, YesNo, type Voter } from "@prisma/client";
+import { Candidate, Category, EconomicStatus, Education, Gender, Party, Prisma, Relation, Religion, Symbol, YesNo, type Voter } from "@prisma/client";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
@@ -74,15 +74,6 @@ export const actions:Actions = {
                 id: voterId
             },
             data: {
-                name: String(form.get('name')) || undefined,
-                gender: Gender[form.get('gender') as keyof typeof Gender] || undefined,
-                age: Number(form.get('age')) || undefined,
-                partId: Number(form.get('partId')) || undefined, // TODO
-                epicNo: String(form.get('epicNo')) || undefined,
-                acNo: Number(form.get('acNo')) || undefined,
-                slNoInPart: Number(form.get('slNoInPart')) || undefined,
-                relationName: String(form.get('relationName')) || undefined,
-                relationType: Relation[form.get('relationType') as keyof typeof Relation] || undefined,
                 religion: Religion[form.get('religion') as keyof typeof Religion] || undefined,
                 caste: String(form.get('caste')) !== "null" && String(form.get('caste')) || undefined,
                 subcaste: String(form.get('subcaste')) !== "null" && String(form.get('subcaste')) || undefined,
@@ -108,13 +99,25 @@ export const actions:Actions = {
             }
         })
         const newVoterData = JSON.parse(JSON.stringify(newVoter))
-        
+
+        const location = await prisma.location.create({
+            data: {
+                accuracy: new Prisma.Decimal(String(form.get('accuracy'))),
+                altitude: new Prisma.Decimal(String(form.get('altitude'))),
+                altitudeAccuracy: new Prisma.Decimal(String(form.get('altitudeAccuracy'))),
+                latitude: new Prisma.Decimal(String(form.get('latitude'))),
+                longitude: new Prisma.Decimal(String(form.get('longitude'))),
+                timestamp: String(form.get('timestamp'))
+            }
+        })
+
         await prisma.voterEditLog.create({
             data: {
               voterId: voterId,
               user: String(form.get('user')),
               oldData: oldVoterData,
-              newData: newVoterData
+              newData: newVoterData,
+              locationId: location.id
             },
         })
 
@@ -140,13 +143,25 @@ export const actions:Actions = {
             }
         })
         const newVoterData = JSON.parse(JSON.stringify(newVoter))
+
+        const location = await prisma.location.create({
+            data: {
+                accuracy: new Prisma.Decimal(String(form.get('accuracy'))),
+                altitude: new Prisma.Decimal(String(form.get('altitude'))),
+                altitudeAccuracy: new Prisma.Decimal(String(form.get('altitudeAccuracy'))),
+                latitude: new Prisma.Decimal(String(form.get('latitude'))),
+                longitude: new Prisma.Decimal(String(form.get('longitude'))),
+                timestamp: String(form.get('timestamp'))
+            }
+        })
         
         await prisma.voterEditLog.create({
             data: {
               voterId: voterId,
               user: String(form.get('user')),
               oldData: oldVoterData,
-              newData: newVoterData
+              newData: newVoterData,
+              locationId: location.id
             },
         })
 

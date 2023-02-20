@@ -49,13 +49,15 @@ model Voter {
 }
 
 model VoterEditLog {
-  id        Int      @id @default(autoincrement())
-  voterId   Int
-  user      String
-  oldData   Json?
-  newData   Json?
-  createdAt DateTime @default(now())
-  voter     Voter    @relation(fields: [voterId], references: [id])
+  id         Int      @id @default(autoincrement())
+  voterId    Int
+  user       String
+  oldData    Json?
+  newData    Json?
+  createdAt  DateTime @default(now())
+  voter      Voter    @relation(fields: [voterId], references: [id])
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId Int
 }
 
 model UserPermissions {
@@ -80,6 +82,17 @@ model UserPartPermissions {
   userPermissions   UserPermissions @relation(fields: [userPermissionsId], references: [id])
 
   @@id([partId, userPermissionsId])
+}
+
+model Location {
+  id               Int            @id @default(autoincrement())
+  accuracy         Decimal
+  altitude         Decimal
+  altitudeAccuracy Decimal
+  latitude         Decimal
+  longitude        Decimal
+  timestamp        String
+  VoterEditLog     VoterEditLog[]
 }
 
 enum Relation {
