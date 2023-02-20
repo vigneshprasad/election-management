@@ -22,7 +22,6 @@
         age,
         partId,
         epicNo,
-        acNo,
         slNoInPart,
         relationName,
         relationType,

@@ -100,6 +100,12 @@ export const actions:Actions = {
         })
         const newVoterData = JSON.parse(JSON.stringify(newVoter))
 
+        console.log(form.get('accuracy'));
+        console.log(form.get('altitude'));
+        console.log(form.get('altitudeAccuracy'));
+        console.log(form.get('latitude'));
+        console.log(form.get('longitude'));
+
         const location = await prisma.location.create({
             data: {
                 accuracy: new Prisma.Decimal(String(form.get('accuracy'))),
