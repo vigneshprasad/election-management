@@ -64,7 +64,6 @@
         }
         data.append('accuracy', String(locationData?.accuracy));
         data.append('altitude', String(locationData?.altitude));
-        data.append('altitudeAccuracy', String(locationData?.altitudeAccuracy));
         data.append('latitude', String(locationData?.latitude));
         data.append('longitude', String(locationData?.longitude));
         data.append('timestamp', String(locationData?.timestamp));
@@ -118,7 +117,6 @@
         }
         data.append('accuracy', String(locationData.accuracy));
         data.append('altitude', String(locationData.altitude));
-        data.append('altitudeAccuracy', String(locationData.altitudeAccuracy));
         data.append('latitude', String(locationData.latitude));
         data.append('longitude', String(locationData.longitude));
         data.append('timestamp', String(locationData.timestamp));

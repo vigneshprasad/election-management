@@ -102,7 +102,6 @@ export const actions:Actions = {
 
         console.log(form.get('accuracy'));
         console.log(form.get('altitude'));
-        console.log(form.get('altitudeAccuracy'));
         console.log(form.get('latitude'));
         console.log(form.get('longitude'));
 
@@ -110,7 +109,6 @@ export const actions:Actions = {
             data: {
                 accuracy: new Prisma.Decimal(String(form.get('accuracy'))),
                 altitude: new Prisma.Decimal(String(form.get('altitude'))),
-                altitudeAccuracy: new Prisma.Decimal(String(form.get('altitudeAccuracy'))),
                 latitude: new Prisma.Decimal(String(form.get('latitude'))),
                 longitude: new Prisma.Decimal(String(form.get('longitude'))),
                 timestamp: String(form.get('timestamp'))
@@ -154,7 +152,6 @@ export const actions:Actions = {
             data: {
                 accuracy: new Prisma.Decimal(String(form.get('accuracy'))),
                 altitude: new Prisma.Decimal(String(form.get('altitude'))),
-                altitudeAccuracy: new Prisma.Decimal(String(form.get('altitudeAccuracy'))),
                 latitude: new Prisma.Decimal(String(form.get('latitude'))),
                 longitude: new Prisma.Decimal(String(form.get('longitude'))),
                 timestamp: String(form.get('timestamp'))

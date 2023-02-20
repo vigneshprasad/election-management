@@ -85,14 +85,13 @@ model UserPartPermissions {
 }
 
 model Location {
-  id               Int            @id @default(autoincrement())
-  accuracy         Decimal
-  altitude         Decimal
-  altitudeAccuracy Decimal
-  latitude         Decimal
-  longitude        Decimal
-  timestamp        String
-  VoterEditLog     VoterEditLog[]
+  id           Int            @id @default(autoincrement())
+  accuracy     Decimal
+  altitude     Decimal
+  latitude     Decimal
+  longitude    Decimal
+  timestamp    String
+  VoterEditLog VoterEditLog[]
 }
 
 enum Relation {
