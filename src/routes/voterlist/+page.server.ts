@@ -29,7 +29,7 @@ export const load = (async ({ locals, url }) => {
         });
     }
     
-    if(!parts) {
+    if(parts.length === 0) {
         throw error(404, `Not found. No parts were loaded. ${parts} `);
     }
 

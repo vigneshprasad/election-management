@@ -230,7 +230,7 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
             if(voter.age - person.age < 1 || voter.age - person.age > 4) {
                 continue
             }
-            const comp = compareTwoStrings(person.name, voter.name);
+            const comp = compareTwoStrings(person.name.toLowerCase(), voter.name.toLowerCase());
             if(comp < 0.5) {
                 continue
             }
@@ -279,7 +279,7 @@ async function uploadData(surveyfilename:string, voterfilename:string, dry_run:b
             }
         }
     }
-    console.log(count);
+    console.log(voterfilename, count);
 }
 
 function sanitiseReligion(religion:string) : Religion {
@@ -384,8 +384,26 @@ function sanitiseParty(leader:string) : Party | undefined {
 // uploadData('/data/survey/192.csv', '/data/192.csv', false)
 // uploadData('/data/survey/170.csv', '/data/170.csv', false)
 // uploadData('/data/survey/189.csv', '/data/189.csv', false)
-// uploadData('/data/survey/178.csv', '/data/178.csv', false)
-// voterClear()
+// uploadData('/data/survey/147.csv', '/data/147.csv', false)
+// uploadData('/data/survey/148.csv', '/data/148.csv', false)
+// uploadData('/data/survey/153.csv', '/data/153.csv', false)
+// uploadData('/data/survey/154.csv', '/data/154.csv', false)
+// uploadData('/data/survey/157.csv', '/data/157.csv', false)
+// uploadData('/data/survey/166.csv', '/data/166.csv', false)
+// uploadData('/data/survey/167.csv', '/data/167.csv', false)
+// uploadData('/data/survey/168.csv', '/data/168.csv', false)
+// uploadData('/data/survey/171.csv', '/data/171.csv', false)
+// uploadData('/data/survey/172.csv', '/data/172.csv', false)
+// uploadData('/data/survey/173.csv', '/data/173.csv', false)
+// uploadData('/data/survey/174.csv', '/data/174.csv', false)
+// uploadData('/data/survey/176.csv', '/data/176.csv', false)
+// uploadData('/data/survey/177.csv', '/data/177.csv', false)
+// uploadData('/data/survey/185.csv', '/data/185.csv', false)
+// uploadData('/data/survey/186.csv', '/data/186.csv', false)
+// uploadData('/data/survey/187.csv', '/data/187.csv', false)
+// uploadData('/data/survey/191.csv', '/data/191.csv', false)
+uploadData('/data/survey/169.csv', '/data/169.csv', true)
+uploadData('/data/survey/188.csv', '/data/188.csv', true)
 
 async function voterClear() : Promise<void> {
     await prisma.voter.updateMany({
